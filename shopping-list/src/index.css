@@ -48,7 +48,11 @@ input {
   padding: 1rem 3rem;
   cursor: pointer;
 }
-
+.check{
+  margin-right: 5px;
+  cursor: pointer;
+  
+}
 .list {
   background-color: #B7B7B7;
   color: #fff;
