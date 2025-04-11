@@ -1,18 +1,20 @@
-const items=[
-  {id:1, name:'item1', quantity:1, completed:false},
-  {id:2, name:'item2', quantity:2, completed:false},
-  {id:3, name:'item3', quantity:1, completed:false},
-  {id:4, name:'item4', quantity:4, completed:true},
-  {id:5, name:'item5', quantity:2, completed:true},
-];
+import { useState } from "react";
+
 
 
 function App() {
+  const[items,setItems]=useState([]);
+  function handleAddItem(item){
+    setItems((items)=> [...items,item]);  
+  }
+  function handleDeleteItem(id){
+    setItems((items)=> items.filter((item)=> item.id !== id));
+  }
   return (
  <div className='app'>
      <Header/>
-    <Form/>
-    <List/>
+    <Form onAddItem={handleAddItem}/>
+    <List items={items} onDeleteItem={handleDeleteItem}/>
   </div>
   );
 }
@@ -22,34 +24,48 @@ return(
   <h1>🛒 Shopping List</h1>
 );
 }
-function Form(){
+function Form({onAddItem}){
+  const[title,setTitle]=useState("");
+  const[quantity,setQuantity]=useState(1);
+
+  function hanlderFormSubmit(e){
+    e.preventDefault();
+   const item={id:Date.now(),title, quantity,completed:false};  
+   onAddItem(item); 
+   setTitle("");
+    setQuantity(1);
+  };
 return(
-  <form className='form'>
-    <input type="text" placeholder="Add item" />
-    <select >
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
+  <form className='form' onSubmit={hanlderFormSubmit}>
+    <input type="text" placeholder="Add item" value={title} onChange={(e) => setTitle(e.target.value)} />
+    <select value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
+      {Array.from({length: 10},(v,i)=>i+1).map((num)=><option key={num} value={num}>{num}</option>)}
     </select>
     <button type="submit">Add</button>
   </form>
 );
 }
 
-function List(){
-  return(
-    <div className='list'>
-    <ul>
-          {items.map((item,index) => (<Item item={item} key={index}/>))}
-    </ul>  
-    </div>
-  );
+function List({items,onDeleteItem}){
+  return<>
+  {
+    items.length === 0 ? (
+      <p>No items in the cart</p>
+    ) : (
+      <ul className="list">
+        {items.map((item) => (
+          <Item key={item.id} item={item} onDeleteItem={onDeleteItem} />
+        ))}
+      </ul>
+    )
+  }
+  </>
 }
-function Item({item}){
+function Item({item,onDeleteItem}){
   return(
   <li>
-    <span style={item.completed ? {textDecoration:"line-through"} : {}}>{item.name}</span>
-    <button>X</button>
+    <span style={item.completed ? {textDecoration:"line-through"} : {}}>{item.title}</span>
+    <button onClick={()=>onDeleteItem(item.id)}>X</button>
   </li>
   );
 }
@@ -59,6 +75,7 @@ function Footer(){
     <footer>
       <p>You have 10 products in your cart</p>
     </footer>
+
   );
 }
 export default App
