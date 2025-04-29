@@ -1,63 +1,29 @@
-import React, { useState } from 'react';
-const movie_list = [
-  {
-    Id: "769",
-    Title: "GoodFellas",
-    Year: "1990",
-    Poster:
-      "https://image.tmdb.org/t/p/original/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
-  },
-  {
-    Id: "120",
-    Title: "The Lord of the Rings",
-    Year: "2001",
-    Poster:
-      "https://image.tmdb.org/t/p/original/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
-  },
-  {
-    Id: "27205",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://image.tmdb.org/t/p/original/ljsZTbVsrQSqZgWeep2B1QiDKuh.jpg",
-  },
-  {
-    Id: "105",
-    Title: "Back to the Future",
-    Year: "1985",
-    Poster:
-      "https://image.tmdb.org/t/p/original/fNOH9f1aA7XRTzl1sAOx9iF553Q.jpg",
-  }
-];
+import React, { useState, useEffect } from 'react';
 
 const movie_selected_list = [
-  {
-    Id: "769",
-    Title: "GoodFellas",
-    Year: "1990",
-    Poster:
-      "https://image.tmdb.org/t/p/original/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
-    duration: 120,
-    rating: 4.5,
-  },
-  {
-    Id: "120",
-    Title: "The Lord of the Rings",
-    Year: "2001",
-    Poster:
-      "https://image.tmdb.org/t/p/original/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
-    duration: 120,
-    rating: 5.5,
-  }
 ];
-
+const api_Key = '15642a6eda861eab12598a47d9d6ccf3';
+const query = 'last';
 const getAverage = (array) => array.reduce((sum, value) => sum + value, 0) / array.length;
 
 export default function App() {
   const [selectedMovies, setSelectedMovies] = useState(movie_selected_list);
-  const [movies, setMovies] = useState(movie_list);
-  const averageRating = getAverage(movie_selected_list.map((movie) => movie.rating))
-  const averageDuration = getAverage(movie_selected_list.map((movie) => movie.duration))
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    async function fetchMovies() {
+      setLoading(true);
+      const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${api_Key}&query=${query}`)
+      const data = await response.json();
+      setMovies(data.results || []);
+      setLoading(false);
+    }
+    fetchMovies();
+  }, []);
+
+  const averageRating = getAverage(selectedMovies.map((movie) => movie.rating));
+  const averageDuration = getAverage(selectedMovies.map((movie) => movie.duration));
+
   return (
     <>
       <NavBar>
@@ -68,20 +34,25 @@ export default function App() {
       <MainContent  >
         <div className="col-md-9">
           <ListContainer >
-            <MovieCardComponent movies={movies} />
+            {loading ? <Loading /> : <MovieCardComponent movies={movies} />}
           </ListContainer>
         </div>
         <div className="col-md-3">
           <ListContainer >
             <UserListSummary moviesLenght={selectedMovies.length} averageRating={averageRating} averageDuration={averageDuration} />
-
             <SelectedMovieCard selectedMovies={selectedMovies} />
-
           </ListContainer>
         </div>
       </MainContent>
     </>
   )
+}
+function Loading() {
+  return (
+    <div className="spinner-border text-primary" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  );
 }
 function NavBar({ children }) {
   return (
@@ -99,7 +70,6 @@ function NavBar({ children }) {
 function NavBrand() {
   return (
     <div className="col-4"><i className='bi bi-camera-reels me-2'></i>Movie App</div>
-
   )
 }
 function NavSearch() {
@@ -126,7 +96,6 @@ function MainContent({ children }) {
   )
 }
 function ListContainer({ children }) {
-
   const [isOpen, setIsOpen] = useState(true);
   return (
     <div className="movie-list">
@@ -134,7 +103,6 @@ function ListContainer({ children }) {
       {
         isOpen &&
         children
-
       }
     </div>
   )
@@ -142,23 +110,34 @@ function ListContainer({ children }) {
 function MovieCardComponent({ movies }) {
   return ((
     <div className="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-4">
-      {
-
-        movies.map((movie) => (
-          <div className='col mb-2' key={movie.Id}>
-            <div className="card">
-              <img src={movie.Poster} className="card-img-top" alt={movie.Title} />
-              <div className="card-body">
-                <h5 className="card-title">{movie.Title}</h5>
-                <p className="card-text"><i className='bi bi-calendar2-date me-1'></i> {movie.Year}</p>
-                <button className="btn btn-primary">Add to Selected</button>
+      {movies.map((movie) => (
+        <div className="col mb-2" key={movie.id}>
+          <div className="card h-100">
+            {movie.poster_path ? (
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                className="card-img-top"
+                alt={movie.title || movie.name || "No Title"}
+              />
+            ) : (
+              <div
+                className="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center"
+                style={{ height: "660px" }}
+              >
+                No Image Available
               </div>
+            )}
+            <div className="card-body d-flex flex-column">
+              <h5 className="card-title">{movie.title || movie.name || "No Title"}</h5>
+              <p className="card-text">
+                <i className="bi bi-calendar2-date me-1"></i>{" "}
+                {movie.release_date ? new Date(movie.release_date).getFullYear() : "Unknown Year"}
+              </p>
+              <button className="btn btn-primary mt-auto">Add to Selected</button>
             </div>
           </div>
-        )
-        )
-
-      }
+        </div>
+      ))}
     </div>
   ))
 }
@@ -170,11 +149,11 @@ function UserListSummary({ moviesLenght, averageRating, averageDuration }) {
         <div className='d-flex justify-content-between'>
           <p>
             <i className="bi bi-star-fill text-warning"></i>
-            <span>{averageRating.toFixed(1)}</span>
+            <span>{averageRating ? averageRating.toFixed(1) : 0}</span>
           </p>
           <p>
             <i className="bi bi-clock me-1"></i>
-            <span>{averageDuration} Min</span>
+            <span>{averageDuration ? averageDuration : 0} Min</span>
           </p>
         </div>
       </div>
@@ -183,18 +162,18 @@ function UserListSummary({ moviesLenght, averageRating, averageDuration }) {
 }
 function SelectedMovieCard({ selectedMovies }) {
   return (
-    selectedMovies.map((selectedMovie) => (
-      <div className="card mb-2" key={selectedMovie.Id}>
+    selectedMovies.map((selectedMovies) => (
+      <div className="card mb-2" key={selectedMovies.Id}>
         <div className="row">
           <div className="col-4">
-            <img src={selectedMovie.Poster} alt={selectedMovie.Title} className="img-fluid rounded-start" />
+            <img src={selectedMovies.Poster} alt={selectedMovies.Title} className="img-fluid rounded-start" />
           </div>
           <div className="col-8">
             <div className="card-body">
-              <h5 className="card-title">{selectedMovie.Title}</h5>
+              <h5 className="card-title">{selectedMovies.Title}</h5>
               <div className="d-flex justify-content-between">
-                <p className="card-text"><i className='bi bi-clock me-1'></i> {selectedMovie.duration.toString()} min</p>
-                <p className="card-text"><i className='bi bi-star-fill text-warning'></i> {selectedMovie.rating.toString()}</p>
+                <p className="card-text"><i className='bi bi-clock me-1'></i> {selectedMovies.duration.toString()} min</p>
+                <p className="card-text"><i className='bi bi-star-fill text-warning'></i> {selectedMovies.rating.toString()}</p>
               </div>
               <button className="btn btn-danger">Remove</button>
             </div>

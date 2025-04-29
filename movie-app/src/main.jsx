@@ -8,7 +8,7 @@ import StartRating from './StartRating.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-
-    <StartRating maxRating={7} />
+    <App />
+    {/* <StartRating maxRating={7} color={'#fcc419'} width={20} height={20} /> */}
   </StrictMode>,
 )

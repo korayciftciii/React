@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 const itemContainerStyle = {
     display: 'flex',
-    gap: '.2rem'
+    gap: '.2rem',
+    alignItems: 'center',
 };
 const containerStyle = {
     display: 'flex',
@@ -11,20 +13,37 @@ const containerStyle = {
 const textStill = {
     margin: '.2rem',
 };
-export default function StartRating({ maxRating = 5, color = '#fcc419', width = '20px', height = '20px' }) {
+StartRating.propTypes = {
+    maxRating: PropTypes.number.isRequired,
+    color: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
+}
+export default function StartRating({ maxRating, color = '#fcc419', width = 20, height = 20 }) {
     const [rating, setRating] = useState(0);
+    const [hoverRating, setHoverRating] = useState(0);
     return (
         <div style={containerStyle}>
             <div style={itemContainerStyle}>
-                {Array.from({ length: maxRating }, (val, i) => (<Star color={color} width={width} height={height} fill={rating >= i + 1} onRating={() => setRating(i + 1)} />))}
+                {Array.from({ length: maxRating }, (val, i) =>
+                (<Star
+                    key={i}
+                    color={color}
+                    width={width}
+                    height={height}
+                    fill={hoverRating ? hoverRating >= i + 1 : rating >= i + 1}
+                    onRating={() => setRating(i + 1)}
+                    onHoverEnter={() => setHoverRating(i + 1)}
+                    onHoverLeave={() => setHoverRating(0)}
+                />))}
             </div>
-            <p style={textStill}><b>({rating || 0})</b></p>
+            <p style={textStill}><b>({hoverRating || rating || 0})</b></p>
         </div>
     );
 }
-function Star({ fill, onRating, color, width, height }) {
+function Star({ fill, color, width, height, onHoverEnter, onHoverLeave, onRating }) {
     return (
-        <span onClick={onRating} style={{ cursor: 'pointer' }}>
+        <span onClick={onRating} onMouseEnter={onHoverEnter} onMouseLeave={onHoverLeave} style={{ cursor: 'pointer' }}>
             {fill ? (<svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} fill={color} viewBox="0 0 16 16">
                 <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
             </svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} fill={color} viewBox="0 0 16 16">
