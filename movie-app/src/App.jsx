@@ -10,13 +10,27 @@ export default function App() {
   const [selectedMovies, setSelectedMovies] = useState(movie_selected_list);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   useEffect(() => {
     async function fetchMovies() {
-      setLoading(true);
-      const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${api_Key}&query=${query}`)
-      const data = await response.json();
-      setMovies(data.results || []);
-      setLoading(false);
+      try {
+        setLoading(true);
+        setError("");
+        const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${api_Key}&query=${query}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.total_results === 0) {
+          throw new Error('No movies found');
+        }
+        setMovies(data.results || []);
+      } catch (err) {
+        setError(err.message);
+      }
+      finally {
+        setLoading(false);
+      }
     }
     fetchMovies();
   }, []);
@@ -34,7 +48,9 @@ export default function App() {
       <MainContent  >
         <div className="col-md-9">
           <ListContainer >
-            {loading ? <Loading /> : <MovieCardComponent movies={movies} />}
+            {loading && <Loading />}
+            {!loading && !error && <MovieCardComponent movies={movies} />}
+            {error && <ErrorMessage message={error} />}
           </ListContainer>
         </div>
         <div className="col-md-3">
@@ -53,6 +69,11 @@ function Loading() {
       <span className="visually-hidden">Loading...</span>
     </div>
   );
+}
+function ErrorMessage({ message }) {
+  return (
+    < div className="alert alert-danger" role="alert">{message}</div>
+  )
 }
 function NavBar({ children }) {
   return (
