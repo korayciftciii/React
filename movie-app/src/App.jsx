@@ -273,7 +273,7 @@ function UserListSummary({ moviesLenght, averageRating, averageDuration }) {
           </p>
           <p>
             <i className="bi bi-clock me-1"></i>
-            <span>{averageDuration ? averageDuration.toFixed(2) : 0} Min</span>
+            <span>{averageDuration ? averageDuration.toFixed(0) : 0} Min</span>
           </p>
         </div>
       </div>
