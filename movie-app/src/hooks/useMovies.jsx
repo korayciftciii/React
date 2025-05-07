@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 export function useMovies(query) {
-    const api_Key = '';
+    const api_Key = '15642a6eda861eab12598a47d9d6ccf3';
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");

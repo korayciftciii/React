@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 
 export function useMovieDetails(id) {
-    const api_Key = '';
+    const api_Key = '15642a6eda861eab12598a47d9d6ccf3';
     const [movieDetails, setMovieDetails] = useState({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
