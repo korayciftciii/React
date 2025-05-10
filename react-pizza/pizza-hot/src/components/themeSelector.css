@@ -1,0 +1,24 @@
+.theme-selector {
+
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1em;
+}
+
+.theme-links span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-left: 1em;
+    cursor: pointer;
+}
+
+.mode-toggle {
+    margin-right: auto;
+}
+
+.mode-toggle i {
+    font-size: 1.5rem;
+    cursor: pointer;
+}
