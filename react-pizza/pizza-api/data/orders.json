@@ -1,0 +1,90 @@
+[
+    {
+        "items": [
+            {
+                "id": "3",
+                "title": "Sucuk Mısır",
+                "description": "Pizza sosu, mozzarella peyniri, sucuk, mısır",
+                "image": "3.jpg",
+                "price": "285",
+                "quantity": 1
+            },
+            {
+                "id": "2",
+                "title": "Sebzesever",
+                "description": "Pizza sosu, mozzarella peyniri, mantar, yeşilbiber, soğan, domates, mısır",
+                "image": "2.jpg",
+                "price": "270",
+                "quantity": 1
+            },
+            {
+                "id": "1",
+                "title": "Çiftlik Evi",
+                "description": "Pizza sosu, mozzarella peyniri, salam, mantar",
+                "image": "1.jpg",
+                "price": "280",
+                "quantity": 1
+            }
+        ],
+        "customer": {
+            "name": "Koray",
+            "surname": "Çiftçi",
+            "email": "korayciftciii60@gmail",
+            "phone": "05372759226",
+            "address": "Alanyurt Fatih mahallesi Teknik sokak Dayanışma Kooperatifi H blok daire 3 Bursa/İnegöl",
+            "city": "Bursa",
+            "district": "Bursa",
+            "postalCode": "16400"
+        },
+        "total": 835,
+        "id": "1746908613131"
+    },
+    {
+        "items": [
+            {
+                "id": "3",
+                "title": "Sucuk Mısır",
+                "description": "Pizza sosu, mozzarella peyniri, sucuk, mısır",
+                "image": "3.jpg",
+                "price": "285",
+                "quantity": 1
+            }
+        ],
+        "customer": {
+            "name": "Koray",
+            "surname": "Çiftçi",
+            "email": "korayciftciii60@gmail",
+            "phone": "05372759226",
+            "address": "Alanyurt Fatih mahallesi Teknik sokak Dayanışma Kooperatifi H blok daire 3 Bursa/İnegöl",
+            "city": "Bursa",
+            "district": "Bursa",
+            "postalCode": "16400"
+        },
+        "total": 285,
+        "id": "1746908842424"
+    },
+    {
+        "items": [
+            {
+                "id": "4",
+                "title": "Margarita",
+                "description": "Pizza sosu, mozzarella peyniri",
+                "image": "4.jpg",
+                "price": "320",
+                "quantity": 2
+            }
+        ],
+        "customer": {
+            "name": "Koray",
+            "surname": "Çiftçi",
+            "email": "korayciftciii60@gmail",
+            "phone": "05372759226",
+            "address": "Alanyurt Fatih mahallesi Teknik sokak Dayanışma Kooperatifi H blok daire 3 Bursa/İnegöl",
+            "city": "Bursa",
+            "district": "Bursa",
+            "postalCode": "16400"
+        },
+        "total": 640,
+        "id": "1746909139512"
+    }
+]

@@ -3,7 +3,8 @@ const express = require("express");
 const fs = require("fs/promises");
 
 const app = express();
-
+const cors = require("cors");
+app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
@@ -31,14 +32,10 @@ app.post("/orders", async (req, res) => {
   }
 
   if (
-    order.customer.name === null ||
-    order.customer.name.trim() === "" ||
-    order.customer.email === null ||
-    !order.customer.email.includes("@") ||
-    order.customer.address === null ||
-    order.customer.address.trim() === "" ||
-    order.customer.city === null ||
-    order.customer.city.trim() === ""
+    !order.customer?.name?.trim() ||
+    !order.customer?.email?.includes("@") ||
+    !order.customer?.address?.trim() ||
+    !order.customer?.city?.trim()
   ) {
     return res.status(400).json({
       message:

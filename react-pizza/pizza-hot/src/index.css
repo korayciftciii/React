@@ -7,8 +7,68 @@
     -webkit-transform: translateY(-10px);
     transform: translateY(-10px);
 }
+
 .item-price {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.modal-box {
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, .16);
+    width: 75%;
+    max-width: 500px;
+    padding: 1rem;
+}
+
+dialog::backdrop {
+    background-color: rgba(161, 146, 146, 0.5);
+}
+
+dialog[open] {
+    animation: fade-slided-up 0.3s ease-out forwards;
+}
+
+@keyframes fade-slided-up {
+    from {
+        opacity: 0;
+        transform: translateY(4rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.actions button {
+    width: 30px;
+    margin-bottom: .2rem;
+}
+
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-items {
+    padding: 0;
+    margin: 0;
 }
